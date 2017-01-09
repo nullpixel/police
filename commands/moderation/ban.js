@@ -89,7 +89,7 @@ module.exports = {
             } else {
                 embed.setTitle("ERROR")
                     .setColor("#ff0000")
-                    .setDescription("You didn\"t mention anyone.")
+                    .setDescription("You didn\'t mention anyone.")
                     .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
                 channel.sendEmbed(embed, "", { disableEveryone: true });
             }

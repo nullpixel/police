@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.js");
+const bot = new require("./bot.js");
 
 console.log("Initializing Police...");
 
@@ -11,10 +12,14 @@ client.on("ready", () => {
     client.user.setGame("\ud83d\udea8");
 
     client.guilds.forEach(guild => {
-        require("./bot.js").init({
-            client: client,
-            guild: guild
-        });
+        try {
+            new bot({
+                client: client,
+                guild: guild
+            });
+        } catch(e) {
+            console.error(e);
+        }
     });
 });
 

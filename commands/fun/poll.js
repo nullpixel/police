@@ -32,7 +32,7 @@ module.exports = {
             const answers = message.match(/`([^`]+)`/g).splice(1).map(value => { return value.replace(/^`/, "").replace(/`$/, ""); });
             const pollID = Math.random().toString(36).substr(2, 4);
 
-            const regional_indicators = Array(10).fill(0).map((value, key) => { return eval(""\\ud83c\\udde" + (key + 6).toString(16) + """); });
+            const regional_indicators = Array(10).fill(0).map((value, key) => { return eval("'\\ud83c\\udde" + (key + 6).toString(16) + "'"); });
 
             if(answers.length > regional_indicators.length) {
                 channel.sendEmbed(
