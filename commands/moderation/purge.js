@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const common = require("../../common.js");
 
 module.exports = {
     name: "purge",
@@ -14,15 +15,15 @@ module.exports = {
 
     exec(args, mentions, sender, channel) {
         if(args.length === 0 || (isNaN(args[0]) && args[0] !== "all")) args[0] = 10;
-        channel.sendEmbed(
-            new Discord.RichEmbed()
-                .setTitle("Purging...")
-                .setColor("#ff0000")
-                .setDescription(args[0] == "all" ? "Purging all previous message(s)..." : "Purging previous " + args[0] + " message(s)...")
-                .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-            "",
-            { disableEveryone: true }
-        ).then(embed => {
+        common.sendAsAuthorizedEmbed(
+          channel,
+          new Discord.RichEmbed()
+              .setTitle("Purging...")
+              .setColor("#ff0000")
+              .setDescription(args[0] == "all" ? "Purging all previous message(s)..." : "Purging previous " + args[0] + " message(s)..."),
+          sender
+        )
+        .then(embed => {
             channel.fetchMessages(args[0] === "all" ? {} : { limit: args[0]++}).then(messages => {
                 console.log(`Going to prune: ${args[0]++}`);
                 let deletableMessages = [];

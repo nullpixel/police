@@ -58,17 +58,16 @@ module.exports = {
                         }
                     });
 
-                    channel.sendEmbed(
-                        new Discord.RichEmbed()
-                            .setTitle("Information about command `" + command.name + "`")
-                            .setColor("#3498db")
-                            .addField("Arguments", argumentsComposed + "\n\n" + argumentDescriptions)
-                            .addField("Category", commandCategory ? commandCategory : "not found")
-                            .addField("Permissions", command.permissions.map(perm => perm.toLowerCase().replace("_", " ")).join(", "))
-                            .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                        "",
-                        { disableEveryone: true }
-                    );
+                    common.sendAsAuthorizedEmbed(
+                      channel,
+                      new Discord.RichEmbed()
+                          .setTitle("Information about command `" + command.name + "`")
+                          .setColor("#3498db")
+                          .addField("Arguments", argumentsComposed + "\n\n" + argumentDescriptions)
+                          .addField("Category", commandCategory ? commandCategory : "not found")
+                          .addField("Permissions", command.permissions.map(perm => perm.toLowerCase().replace("_", " ")).join(", ")),
+                      sender
+                    )
                 } else {
                     common.sendErrorEmbed(channel, "Command not found.", sender);
                 }

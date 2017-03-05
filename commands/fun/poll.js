@@ -47,8 +47,7 @@ module.exports = {
                 let embed = new Discord.RichEmbed()
                     .setTitle(question)
                     .setColor("#3498db")
-                    .setDescription("Time to answer: " + time + " minute(s). Answer with `$poll-" + pollID + " [" + Array(answers.length).fill(0).map((value, key) => { return String.fromCharCode(key + 65); }).join("|") + "]`")
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
+                    .setDescription("Time to answer: " + time + " minute(s). Answer with `$poll-" + pollID + " [" + Array(answers.length).fill(0).map((value, key) => { return String.fromCharCode(key + 65); }).join("|") + "]`");
 
                 let i = 0;
                 answers.forEach(answer => {
@@ -56,11 +55,7 @@ module.exports = {
                     i++;
                 });
 
-                channel.sendEmbed(
-                    embed,
-                    "",
-                    { disableEveryone: true }
-                );
+                common.sendAsAuthorizedEmbed(channel, embed, sender);
 
                 setTimeout((channel, pollID, sender, regional_indicators) => {
                     let poll = module.exports.active_polls[pollID];
