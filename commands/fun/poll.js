@@ -63,8 +63,7 @@ module.exports = {
                     let embed = new Discord.RichEmbed()
                         .setTitle("Poll ended")
                         .setColor("#9400D3")
-                        .setDescription("Poll #" + pollID + " (_" + poll.question + "_) has ended. The results are:")
-                        .setFooter("This message was a follow-up for an action authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
+                        .setDescription("Poll #" + pollID + " (_" + poll.question + "_) has ended. The results are:");
 
                     // TODO: Redo total answer logic
 
@@ -88,11 +87,7 @@ module.exports = {
                     embed.addField("\u200b", "\u200b", true)
                         .addField("Winner is:", regional_indicators[mostVotes] + " (_" + poll.answers[mostVotes] + "_)");
 
-                    channel.sendEmbed(
-                        embed,
-                        "",
-                        { disableEveryone: true }
-                    );
+                    common.sendAsAuthorizedEmbed(channel, embed, sender, true);
 
                     delete module.exports.active_polls[pollID];
                 }, time * 60 * 1000, channel, pollID, sender, regional_indicators);
