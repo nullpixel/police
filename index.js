@@ -5,7 +5,7 @@ const bot = new require("./bot.js");
 
 console.log("Initializing Police...");
 
-client.on("ready", () => {
+client.once("ready", () => {
     console.log(`Bot has logged in as ${client.user.username}!`);
     console.log(`Creating ${client.guilds.size} instance(s) of bot to scale`);
 

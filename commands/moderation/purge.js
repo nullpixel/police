@@ -14,7 +14,6 @@ module.exports = {
 
     exec(args, mentions, sender, channel) {
         if(args.length === 0 || (isNaN(args[0]) && args[0] !== "all")) args[0] = 10;
-
         channel.sendEmbed(
             new Discord.RichEmbed()
                 .setTitle("Purging...")
@@ -24,13 +23,15 @@ module.exports = {
             "",
             { disableEveryone: true }
         ).then(embed => {
-            channel.fetchMessages(args[0] === "all" ? {} : { limit: args[0] + 1 }).then(messages => {
+            channel.fetchMessages(args[0] === "all" ? {} : { limit: args[0]++}).then(messages => {
+                console.log(`Going to prune: ${args[0]++}`);
                 let deletableMessages = [];
 
                 if(args[0] !== "all") {
                     let i = 0;
                     messages.every(message => {
-                        if(i < args[0] + 1) {
+                        if(i < args[0]++) {
+                            console.log(args[0]++);
                             i++;
 
                             if(message.id !== embed.id) deletableMessages.push(message);

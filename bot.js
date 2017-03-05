@@ -29,7 +29,6 @@ function Bot(options) {
 
     let policeChannels = {
         modLog: null,
-        rules: null,
         log: null,
         commandLog: null
     };
@@ -79,9 +78,9 @@ function Bot(options) {
             roleNames.push(role.name);
         });
 
-        if(roleNames.indexOf("Police-Muted") === -1) {
+        if(roleNames.indexOf("Muted") === -1) {
             guild.createRole({
-                name: "Police-Muted",
+                name: "Muted",
                 color: "#34495e",
                 mentionable: false,
                 permissions: ["READ_MESSAGES", "READ_MESSAGE_HISTORY", "CONNECT"],
@@ -89,17 +88,7 @@ function Bot(options) {
             });
         }
 
-        if(roleNames.indexOf("Police-Not-Accepted") === -1) {
-            guild.createRole({
-                name: "Police-Not-Accepted",
-                color: "#34495e",
-                mentionable: false,
-                permissions: ["READ_MESSAGES", "READ_MESSAGE_HISTORY"],
-                hoist: false
-            });
-        }
-
-        mutedRole = guild.roles.filter(o => { return o.name === "Police-Muted"; }).first();
+        mutedRole = guild.roles.filter(o => { return o.name === "Muted"; }).first();
 
         guild.channels.forEach(channel => {
             channel.overwritePermissions(mutedRole, {
@@ -129,14 +118,6 @@ function Bot(options) {
             });
         } else {
             policeChannels.modLog = guild.channels.filter(o => { return o.name === "police-mod-log"; }).first();
-        }
-
-        if(channelNames.indexOf("police-rules") === -1) {
-            guild.createChannel("police-rules", "text").then(channel => {
-                policeChannels.modLog = channel;
-            });
-        } else {
-            policeChannels.rules = guild.channels.filter(o => { return o.name === "police-rules"; }).first();
         }
 
         if(channelNames.indexOf("police-log") === -1) {
@@ -310,50 +291,11 @@ function Bot(options) {
                                 { disableEveryone: true }
                             ).catch(console.error);
                         }
-                    } else {
-                        logMessage(message);
-                    }
-                } else {
-                    logMessage(message);
+                    } 
                 }
             }
         }
     });
-
-    const logMessage = message => {
-        // message logging
-        if(policeChannels.log && logignore.channels.indexOf(message.channel.id) === -1) {
-            if(message.content.length > 1024) {
-                policeChannels.log.sendEmbed(
-                    new Discord.RichEmbed()
-                        .setTitle("New message")
-                        .setDescription("A new message was posted to channel `" + message.channel.name + "` (" + message.channel.id + ").")
-                        .setColor("#3498db")
-                        .addField("Sender", message.author.username + "#" + message.author.discriminator + " " + (message.member.nickname ? "(" + message.member.nickname + ")" : "(no nickname)") + " (" + message.author.id + ")")
-                        .addField("Content", "Due to the messages large content, the content will be sent in the next message.")
-                        .addField("Attachments", message.attachments.size > 0 ? message.attachments.array().map(attachment => attachment.proxyURL).join("\n") : "no attachments")
-                        .addField("Time", new Date().toString()),
-                    "",
-                    { disableEveryone: true }
-                );
-
-                policeChannels.log.sendMessage(message.content);
-            } else {
-                policeChannels.log.sendEmbed(
-                    new Discord.RichEmbed()
-                        .setTitle("New message")
-                        .setDescription("A new message was posted to channel `" + message.channel.name + "` (" + message.channel.id + ").")
-                        .setColor("#3498db")
-                        .addField("Sender", message.author.username + "#" + message.author.discriminator + " " + (message.member.nickname ? "(" + message.member.nickname + ")" : "(no nickname)") + " (" + message.author.id + ")")
-                        .addField("Content", message.content)
-                        .addField("Attachments", message.attachments.size > 0 ? message.attachments.array().map(attachment => attachment.proxyURL).join("\n") : "no attachments")
-                        .addField("Time", new Date().toString()),
-                    "",
-                    { disableEveryone: true }
-                );
-            }
-        }
-    };
 }
 
 Bot.prototype = Object.create(Bot.prototype);
