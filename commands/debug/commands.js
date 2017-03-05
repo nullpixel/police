@@ -34,15 +34,7 @@ module.exports = {
 
             commandsComposed += "\nGet more information about a command with `$commands info [command name]`";
 
-            channel.sendEmbed(
-                new Discord.RichEmbed()
-                    .setTitle("Commands")
-                    .setColor("#3498db")
-                    .setDescription(commandsComposed)
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                "",
-                { disableEveryone: true }
-            );
+            common.sendNeutralEmbed(channel, "Commands", commandsComposed, sender);
         } else {
             if(args[0] == "info" && args[1]) {
                 let command = commands[args[1]];

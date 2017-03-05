@@ -58,14 +58,7 @@ module.exports = {
                             const identifier = Math.random().toString(36).substr(2, 4);
                             module.exports.pendingBans[identifier] = setTimeout(module.exports.softban, 8 * 1000, mentions, member, sender, args, policeChannels, channel);
 
-                            channel.sendEmbed(
-                                new Discord.RichEmbed()
-                                    .setTitle("Warning!")
-                                    .setDescription("There is another user with similar username or nickname " + (member.nickname || member.username) + " has. If you want to cancel, run command `$ban-" + identifier + " cancel` in 8 seconds. After 8 seconds, the user will be banned normally.")
-                                    .setColor("#FFCC00"),
-                                "",
-                                { disableEveryone: true }
-                            );
+                            common.sendWarningEmbed(channel, "There is another user with similar username or nickname " + (member.nickname || member.username) + " has. If you want to cancel, run command `$ban-" + identifier + " cancel` in 8 seconds. After 8 seconds, the user will be banned normally.");
                         }
                     });
                 } else {

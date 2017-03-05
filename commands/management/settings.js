@@ -34,15 +34,7 @@ module.exports = {
                 });
             });
 
-            channel.sendEmbed(
-                new Discord.RichEmbed()
-                    .setTitle("Settings")
-                    .setColor("#3498db")
-                    .setDescription(settingsComposed)
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                "",
-                { disableEveryone: true }
-            );
+            common.sendNeutralEmbed(channel, "Settings", settingsComposed, sender);
         } else if(args[0] === "set") {
             if(args[1] && args[2]) {
                 let settingType = null;
