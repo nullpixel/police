@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 module.exports = {
     name: "ban",
-    description: "Ban an user",
+    description: "Ban a user",
     permissions: ["BAN_MEMBERS"],
     args: [
         {

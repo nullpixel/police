@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 module.exports = {
     name: "kick",
-    description: "Kick an user",
+    description: "Kick a user",
     permissions: ["KICK_MEMBERS"],
     args: [
         {

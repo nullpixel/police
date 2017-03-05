@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 module.exports = {
     name: "lastseen",
-    description: "When was an user last seen",
+    description: "When was a user last seen",
     permissions: ["MANAGE_MESSAGES"],
     args: [
         {

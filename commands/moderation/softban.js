@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 module.exports = {
     name: "softban",
-    description: "Softban an user (kick and delete messages)",
+    description: "Softban a user (kick and delete messages)",
     permissions: ["BAN_MEMBERS"],
     args: [
         {
