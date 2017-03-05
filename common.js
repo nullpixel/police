@@ -33,7 +33,7 @@ var common = {
   },
   sendAsAuthorizedEmbed: function(channel, embed, sender) {
     return this.sendAsEmbed(channel, embed.setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"));
-  }
+  },
   sendAsEmbed: function(channel, embed) {
     return channel.sendEmbed(embed, "", { disableEveryone: true }).catch(console.error);
   }
