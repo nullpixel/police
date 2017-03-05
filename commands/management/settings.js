@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const common = require("../../common.js");
 
 module.exports = {
     name: "settings",
@@ -60,16 +61,7 @@ module.exports = {
 
                 if(settingType && setting) {
                     settingActs[1](settingCategory, setting, (settingType === "Boolean" ? args[2] === "true" : args[2]));
-
-                    channel.sendEmbed(
-                        new Discord.RichEmbed()
-                            .setTitle("Success!")
-                            .setColor("#32CD32")
-                            .setDescription("Setting `" + setting + "` has been changed to value `" + args[2] + "`.")
-                            .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                        "",
-                        { disableEveryone: true }
-                    );
+                    common.sendSuccessEmbed(channel, "Setting `" + setting + "` has been changed to value `" + args[2] + "`.", sender);
                 }
             }
         }

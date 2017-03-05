@@ -3,15 +3,6 @@ const path = require("path");
 const Discord = require("discord.js");
 const JsDiff = require("diff");
 
-/*
---- COLORS ---
-Success: #32CD32
-Error: #ff0000
-Follow-up: #9400D3
-Neutral: #3498db
-Warning/medium: #FFCC00
-*/
-
 function Bot(options) {
     let settings = {
         commands: {
@@ -291,7 +282,7 @@ function Bot(options) {
                                 { disableEveryone: true }
                             ).catch(console.error);
                         }
-                    } 
+                    }
                 }
             }
         }

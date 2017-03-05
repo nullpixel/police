@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const common = require("../../common.js");
 
 module.exports = {
     name: "lastseen",
@@ -30,14 +31,7 @@ module.exports = {
                 { disableEveryone: true }
             );
         } else {
-            channel.sendEmbed(
-                new Discord.RichEmbed()
-                    .setTitle("ERROR")
-                    .setColor("#ff0000")
-                    .setDescription("You didn\'t mention anyone.")
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                "", { disableEveryone: true }
-            );
+            common.sendErrorEmbed(channel, "You didn\'t mention anyone.", sender);
         }
     }
 };

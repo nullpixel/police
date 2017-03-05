@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const common = require("../../common.js");
 
 module.exports = {
     name: "poll",
@@ -35,15 +36,7 @@ module.exports = {
             const regional_indicators = Array(10).fill(0).map((value, key) => { return eval("'\\ud83c\\udde" + (key + 6).toString(16) + "'"); });
 
             if(answers.length > regional_indicators.length) {
-                channel.sendEmbed(
-                    new Discord.RichEmbed()
-                        .setTitle("ERROR")
-                        .setColor("#ff0000")
-                        .setDescription("Too many viable answers. Maximum: " + regional_indicators.length)
-                        .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                    "",
-                    { disableEveryone: true }
-                );
+                common.sendErrorEmbed(channel, "Too many viable answers. Maximum: " + regional_indicators.length, sender);
             } else {
                 module.exports.active_polls[pollID] = {
                     question: question,
@@ -110,15 +103,7 @@ module.exports = {
                 }, time * 60 * 1000, channel, pollID, sender, regional_indicators);
             }
         } else {
-            channel.sendEmbed(
-                new Discord.RichEmbed()
-                    .setTitle("ERROR")
-                    .setColor("#ff0000")
-                    .setDescription("You didn\'t use the command correctly.")
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                "",
-                { disableEveryone: true }
-            ).then(message => {
+            common.sendErrorEmbed(channel, "You didn\'t use the command correctly.", sender).then(message => {
                 setTimeout(message => {
                     message.delete();
                 }, 5000, message);
@@ -148,59 +133,27 @@ module.exports = {
                         userID: sender.user.id
                     });
 
-                    channel.sendEmbed(
-                        new Discord.RichEmbed()
-                            .setTitle("Success!")
-                            .setColor("#32CD32")
-                            .setDescription("You have voted succesfully.")
-                            .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                        "",
-                        { disableEveryone: true }
-                    ).then(message => {
+                    common.sendSuccessEmbed(channel, "You have voted successfully.", sender).then(message => {
                         setTimeout(message => {
                             message.delete();
                         }, 5000, message);
                     });
                 } else {
-                    channel.sendEmbed(
-                        new Discord.RichEmbed()
-                            .setTitle("ERROR")
-                            .setColor("#ff0000")
-                            .setDescription("That is not a valid answer to the poll.")
-                            .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                        "",
-                        { disableEveryone: true }
-                    ).then(message => {
+                    common.sendErrorEmbed(channel, "That is not a valid answer to the poll.", sender).then(message => {
                         setTimeout(message => {
                             message.delete();
                         }, 5000, message);
                     });
                 }
             } else {
-                channel.sendEmbed(
-                    new Discord.RichEmbed()
-                        .setTitle("ERROR")
-                        .setColor("#ff0000")
-                        .setDescription("You have already answered to that poll.")
-                        .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                    "",
-                    { disableEveryone: true }
-                ).then(message => {
+                common.sendErrorEmbed(channel, "You have already answered to that poll.", sender).then(message => {
                     setTimeout(message => {
                         message.delete();
                     }, 5000, message);
                 });
             }
         } else {
-            channel.sendEmbed(
-                new Discord.RichEmbed()
-                    .setTitle("ERROR")
-                    .setColor("#ff0000")
-                    .setDescription("Poll not found.")
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                "",
-                { disableEveryone: true }
-            ).then(message => {
+            common.sendErrorEmbed(channel, "Poll not found.", sender).then(message => {
                 setTimeout(message => {
                     message.delete();
                 }, 5000, message);

@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const common = require("../../common.js");
 
 module.exports = {
     name: "ban",
@@ -25,10 +26,6 @@ module.exports = {
     pendingBans: {},
 
     exec(args, mentions, sender, channel, raw, policeChannels) {
-        // TODO: redo sending the embed, sending at the end does not work, because promises
-
-        let embed = new Discord.RichEmbed();
-
         if(!isNaN(args[1])) {
             if(mentions.users.first()) {
                 if(!args[2]) args[2] = "Read #rules.";
@@ -73,32 +70,16 @@ module.exports = {
                             }
                         });
                     } else {
-                        embed.setTitle("ERROR")
-                            .setColor("#ff0000")
-                            .setDescription("Your highest role is lower or the same as the member you requested to ban.")
-                            .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
-                        channel.sendEmbed(embed, "", { disableEveryone: true });
+                        common.sendErrorEmbed(channel, "Your highest role is lower or the same as the member you requested to ban.", sender);
                     }
                 }).catch(() => {
-                    embed.setTitle("ERROR")
-                        .setColor("#ff0000")
-                        .setDescription("Could not find the mentioned user.")
-                        .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
-                    channel.sendEmbed(embed, "", { disableEveryone: true });
+                    common.sendErrorEmbed(channel, "Could not find the mentioned user.", sender);
                 });
             } else {
-                embed.setTitle("ERROR")
-                    .setColor("#ff0000")
-                    .setDescription("You didn\'t mention anyone.")
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
-                channel.sendEmbed(embed, "", { disableEveryone: true });
+                common.sendErrorEmbed(channel, "You didn\'t mention anyone.", sender);
             }
         } else {
-            embed.setTitle("ERROR")
-                .setColor("#ff0000")
-                .setDescription(args[1] + " is not a valid length")
-                .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
-            channel.sendEmbed(embed, "", { disableEveryone: true });
+            common.sendErrorEmbed(channel, args[1] + " is not a valid length", sender);
         }
     },
 
@@ -121,14 +102,7 @@ module.exports = {
                     { disableEveryone: true }
                 );
             }
-            channel.sendEmbed(
-                new Discord.RichEmbed()
-                    .setTitle("Success!")
-                    .setColor("#32CD32")
-                    .setDescription("You have banned " + mentions.users.first().username + " (" + mentions.users.first().id + ")")
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                    "", { disableEveryone: true }
-            );
+            common.sendSuccessEmbed(channel, "You have banned " + mentions.users.first().username + " (" + mentions.users.first().id + ")", sender)
         });
     },
 
@@ -136,24 +110,9 @@ module.exports = {
         if(args[0] == "cancel" && sub) {
             if(Object.keys(module.exports.pendingBans).indexOf(sub[0]) > -1) {
                 clearTimeout(module.exports.pendingBans[sub[0]]);
-
-                channel.sendEmbed(
-                    new Discord.RichEmbed()
-                        .setTitle("Success!")
-                        .setColor("#32CD32")
-                        .setDescription("Ban `" + sub + "` has been cancelled.")
-                        .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                    "", { disableEveryone: true }
-                ).catch(console.error);
+                common.sendSuccessEmbed(channel, "Ban `" + sub + "` has been cancelled.", sender);
             } else {
-                channel.sendEmbed(
-                    new Discord.RichEmbed()
-                        .setTitle("ERROR")
-                        .setColor("#ff0000")
-                        .setDescription(sub + " is not a valid pending ban.")
-                        .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                    "", { disableEveryone: true }
-                ).catch(console.error);
+                common.sendErrorEmbed(channel, sub + " is not a valid pending ban.", sender);
             }
         }
     }

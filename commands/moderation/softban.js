@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const common = require("../../common.js");
 
 module.exports = {
     name: "softban",
@@ -68,25 +69,13 @@ module.exports = {
                         }
                     });
                 } else {
-                    embed.setTitle("ERROR")
-                        .setColor("#ff0000")
-                        .setDescription("Your highest role is lower or the same as the member you requested to ban.")
-                        .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
-                    channel.sendEmbed(embed, "", { disableEveryone: true });
+                    common.sendErrorEmbed(channel, "Your highest role is lower or the same as the member you requested to ban.", sender);
                 }
             }).catch(() => {
-                embed.setTitle("ERROR")
-                    .setColor("#ff0000")
-                    .setDescription("Could not find the mentioned user.")
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
-                channel.sendEmbed(embed, "", { disableEveryone: true });
+                common.sendErrorEmbed(channel, "Could not find the mentioned user.", sender);
             });
         } else {
-            embed.setTitle("ERROR")
-                .setColor("#ff0000")
-                .setDescription("You didn\'t mention anyone.")
-                .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
-            channel.sendEmbed(embed, "", { disableEveryone: true });
+            common.sendErrorEmbed(channel, "You didn\'t mention anyone.", sender);
         }
     },
 
@@ -116,14 +105,7 @@ module.exports = {
                             { disableEveryone: true }
                         );
                     }
-                    channel.sendEmbed(
-                        new Discord.RichEmbed()
-                            .setTitle("Success!")
-                            .setColor("#32CD32")
-                            .setDescription("You have softbanned " + mentions.users.first().username + " (" + mentions.users.first().id + ")")
-                            .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                            "", { disableEveryone: true }
-                    );
+                    common.sendSuccessEmbed(channel, "You have softbanned " + mentions.users.first().username + " (" + mentions.users.first().id + ")", sender);
                 });
             }).catch(console.error);
         }).catch(console.error);
@@ -133,24 +115,9 @@ module.exports = {
         if(args[0] == "cancel" && sub) {
             if(Object.keys(module.exports.pendingBans).indexOf(sub[0]) > -1) {
                 clearTimeout(module.exports.pendingBans[sub[0]]);
-
-                channel.sendEmbed(
-                    new Discord.RichEmbed()
-                        .setTitle("Success!")
-                        .setColor("#32CD32")
-                        .setDescription("Softban `" + sub + "` has been cancelled.")
-                        .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                    "", { disableEveryone: true }
-                ).catch(console.error);
+                common.sendSuccessEmbed(channel, "Softban `" + sub + "` has been cancelled.", sender);
             } else {
-                channel.sendEmbed(
-                    new Discord.RichEmbed()
-                        .setTitle("ERROR")
-                        .setColor("#ff0000")
-                        .setDescription(sub + " is not a valid pending softban.")
-                        .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                    "", { disableEveryone: true }
-                ).catch(console.error);
+                common.sendErrorEmbed(channel, sub + " is not a valid pending softban.", sender);
             }
         }
     }

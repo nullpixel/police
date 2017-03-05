@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const common = require("../../common.js");
 
 module.exports = {
     name: "kick",
@@ -68,25 +69,13 @@ module.exports = {
                             }
                         });
                     } else {
-                        embed.setTitle("ERROR")
-                            .setColor("#ff0000")
-                            .setDescription("Your highest role is lower or the same as the member you requested to kick.")
-                            .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
-                        channel.sendEmbed(embed, "", { disableEveryone: true });
+                        common.sendErrorEmbed(channel, "Your highest role is lower or the same as the member you requested to kick.", client);
                     }
                 }).catch(() => {
-                    embed.setTitle("ERROR")
-                        .setColor("#ff0000")
-                        .setDescription("Could not find the mentioned user.")
-                        .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
-                    channel.sendEmbed(embed, "", { disableEveryone: true });
+                    common.sendErrorEmbed(channel, "Could not find the mentioned user.", client);
                 });
             } else {
-                embed.setTitle("ERROR")
-                    .setColor("#ff0000")
-                    .setDescription("You didn\'t mention anyone.")
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")");
-                channel.sendEmbed(embed, "", { disableEveryone: true });
+                common.sendErrorEmbed(channel, "You didn\'t mention anyone.", client);
             }
     },
 
@@ -108,14 +97,7 @@ module.exports = {
                     { disableEveryone: true }
                 );
             }
-            channel.sendEmbed(
-                new Discord.RichEmbed()
-                    .setTitle("Success!")
-                    .setColor("#32CD32")
-                    .setDescription("You have kicked " + mentions.users.first().username + " (" + mentions.users.first().id + ")")
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                    "", { disableEveryone: true }
-            );
+            common.sendSuccessEmbed("You have kicked " + mentions.users.first().username + " (" + mentions.users.first().id + ")");
         });
     },
 
@@ -123,24 +105,9 @@ module.exports = {
         if(args[0] == "cancel" && sub) {
             if(Object.keys(module.exports.pendingBans).indexOf(sub[0]) > -1) {
                 clearTimeout(module.exports.pendingBans[sub[0]]);
-
-                channel.sendEmbed(
-                    new Discord.RichEmbed()
-                        .setTitle("Success!")
-                        .setColor("#32CD32")
-                        .setDescription("Kick `" + sub + "` has been cancelled.")
-                        .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                    "", { disableEveryone: true }
-                ).catch(console.error);
+                common.sendSuccessEmbed(channel, "Kick `" + sub + "` has been cancelled.", sender);
             } else {
-                channel.sendEmbed(
-                    new Discord.RichEmbed()
-                        .setTitle("ERROR")
-                        .setColor("#ff0000")
-                        .setDescription(sub + " is not a valid pending kick.")
-                        .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                    "", { disableEveryone: true }
-                ).catch(console.error);
+                common.sendErrorEmbed(channel, sub + " is not a valid pending kick.", client);
             }
         }
     }
