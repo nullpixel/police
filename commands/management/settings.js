@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const common = require("../../common.js");
 
 module.exports = {
     name: "settings",
@@ -33,15 +34,7 @@ module.exports = {
                 });
             });
 
-            channel.sendEmbed(
-                new Discord.RichEmbed()
-                    .setTitle("Settings")
-                    .setColor("#3498db")
-                    .setDescription(settingsComposed)
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                "",
-                { disableEveryone: true }
-            );
+            common.sendNeutralEmbed(channel, "Settings", settingsComposed, sender);
         } else if(args[0] === "set") {
             if(args[1] && args[2]) {
                 let settingType = null;
@@ -60,16 +53,7 @@ module.exports = {
 
                 if(settingType && setting) {
                     settingActs[1](settingCategory, setting, (settingType === "Boolean" ? args[2] === "true" : args[2]));
-
-                    channel.sendEmbed(
-                        new Discord.RichEmbed()
-                            .setTitle("Success!")
-                            .setColor("#32CD32")
-                            .setDescription("Setting `" + setting + "` has been changed to value `" + args[2] + "`.")
-                            .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                        "",
-                        { disableEveryone: true }
-                    );
+                    common.sendSuccessEmbed(channel, "Setting `" + setting + "` has been changed to value `" + args[2] + "`.", sender);
                 }
             }
         }

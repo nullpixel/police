@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const common = require("../../common.js");
 
 module.exports = {
     name: "ping",
@@ -6,14 +7,6 @@ module.exports = {
     permissions: ["ADMINISTRATOR"],
 
     exec(args, mentions, sender, channel) {
-        channel.sendEmbed(
-            new Discord.RichEmbed()
-                .setTitle("Ping")
-                .setColor("#3498db")
-                .setDescription("Pong!")
-                .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-            "",
-            { disableEveryone: true }
-        );
+        common.sendNeutralEmbed(channel, "Ping", "Pong!", sender);
     }
 };

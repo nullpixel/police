@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const common = require("../../common.js");
 
 module.exports = {
     name: "shell",
@@ -26,15 +27,7 @@ module.exports = {
                 client.on("message", shellHandler);
             });
         } else {
-            channel.sendEmbed(
-                new Discord.RichEmbed()
-                    .setTitle("ERROR")
-                    .setColor("#ff0000")
-                    .setDescription("You do not have enough permissions to open a shell.")
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                "",
-                { disableEveryone: true }
-            );
+            common.sendErrorEmbed(channel, "You do not have enough permissions to open a shell.", sender);
         }
     }
 };

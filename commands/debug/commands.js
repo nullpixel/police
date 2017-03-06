@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const common = require("../../common.js");
 
 module.exports = {
     name: "commands",
@@ -33,15 +34,7 @@ module.exports = {
 
             commandsComposed += "\nGet more information about a command with `$commands info [command name]`";
 
-            channel.sendEmbed(
-                new Discord.RichEmbed()
-                    .setTitle("Commands")
-                    .setColor("#3498db")
-                    .setDescription(commandsComposed)
-                    .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                "",
-                { disableEveryone: true }
-            );
+            common.sendNeutralEmbed(channel, "Commands", commandsComposed, sender);
         } else {
             if(args[0] == "info" && args[1]) {
                 let command = commands[args[1]];
@@ -65,27 +58,18 @@ module.exports = {
                         }
                     });
 
-                    channel.sendEmbed(
-                        new Discord.RichEmbed()
-                            .setTitle("Information about command `" + command.name + "`")
-                            .setColor("#3498db")
-                            .addField("Arguments", argumentsComposed + "\n\n" + argumentDescriptions)
-                            .addField("Category", commandCategory ? commandCategory : "not found")
-                            .addField("Permissions", command.permissions.map(perm => perm.toLowerCase().replace("_", " ")).join(", "))
-                            .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                        "",
-                        { disableEveryone: true }
-                    );
+                    common.sendAsAuthorizedEmbed(
+                      channel,
+                      new Discord.RichEmbed()
+                          .setTitle("Information about command `" + command.name + "`")
+                          .setColor("#3498db")
+                          .addField("Arguments", argumentsComposed + "\n\n" + argumentDescriptions)
+                          .addField("Category", commandCategory ? commandCategory : "not found")
+                          .addField("Permissions", command.permissions.map(perm => perm.toLowerCase().replace("_", " ")).join(", ")),
+                      sender
+                    )
                 } else {
-                    channel.sendEmbed(
-                        new Discord.RichEmbed()
-                            .setTitle("ERROR")
-                            .setColor("#ff0000")
-                            .setDescription("Command not found.")
-                            .setFooter("This action was authorized by " + (sender.nickname || sender.user.username) + "#" + sender.user.discriminator + " (" + sender.user.id +")"),
-                        "",
-                        { disableEveryone: true }
-                    );
+                    common.sendErrorEmbed(channel, "Command not found.", sender);
                 }
             }
         }
